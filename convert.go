@@ -77,13 +77,13 @@ func rawToNeighbors(r interface{}, options ...Option) ([]*Neighbor, error) {
 			}).Error("fail to convert raw data to Neighbor type")
 			return nil, err
 		}
-		log.WithFields(log.Fields{
-			"name":      results[i].Name,
-			"latitude":  results[i].Coord.Lat,
-			"longitude": results[i].Coord.Lon,
-			"distance":  results[i].Dist,
-			"hash":      results[i].Hash,
-		}).Info("find neighbor")
+		// log.WithFields(log.Fields{
+		// 	"name":      results[i].Name,
+		// 	"latitude":  results[i].Coord.Lat,
+		// 	"longitude": results[i].Coord.Lon,
+		// 	"distance":  results[i].Dist,
+		// 	"hash":      results[i].Hash,
+		// }).Info("find neighbor")
 	}
 
 	return results, nil
