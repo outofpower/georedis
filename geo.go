@@ -49,6 +49,23 @@ func (s *Geo) Add(key string, data []*Member) error {
 	return nil
 }
 
+func (s *Geo) Del(key, member string) error {
+	conn := s.pool.Get()
+	defer conn.Close()
+
+	_, err := conn.Do("ZREM", key, member)
+	if err != nil {
+		log.WithFields(log.Fields{
+			"error":  err,
+			"key":    key,
+			"member": member,
+		}).Error("add failed")
+		return err
+	}
+
+	return nil
+}
+
 // Pos gets the meta data by key
 // returned meta data hase the same order of names
 // leave nil for the keys have no data
