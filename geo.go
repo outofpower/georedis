@@ -49,6 +49,7 @@ func (s *Geo) Add(key string, data []*Member) error {
 	return nil
 }
 
+// Del  key member and related meta data from redis
 func (s *Geo) Del(key, member string) error {
 	conn := s.pool.Get()
 	defer conn.Close()
