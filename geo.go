@@ -161,6 +161,34 @@ func (s *Geo) Radius(key string, coord Coordinate, radius int, unit string, opti
 	return rawToNeighbors(r, options...)
 }
 
+func (s *Geo) RadiusCount(key string, coord Coordinate, radius int, unit string, count int, options ...Option) ([]*Neighbor, error) {
+	conn := s.pool.Get()
+	defer conn.Close()
+
+	// basic command
+	args := []interface{}{key, coord.Lon, coord.Lat, radius, unit}
+
+	// set options
+	for _, opt := range options {
+		args = append(args, optMap[opt])
+	}
+	args = append(args, "COUNT")
+	args = append(args, count)
+	// execute command
+	r, err := conn.Do("GEORADIUS", args...)
+	if err != nil {
+		log.WithFields(log.Fields{
+			"error":     err,
+			"key":       key,
+			"latitude":  coord.Lat,
+			"longitude": coord.Lon,
+		}).Error("get radius fail")
+		return nil, err
+	}
+
+	return rawToNeighbors(r, options...)
+}
+
 // RadiusByMember find the neighbor with coordinate
 func (s *Geo) RadiusByMember(key, member string, radius int, unit string, count int, options ...Option) ([]*Neighbor, error) {
 	conn := s.pool.Get()
