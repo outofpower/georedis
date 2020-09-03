@@ -90,14 +90,14 @@ func (s *Geo) Pos(key string, names ...string) ([]*Member, error) {
 	}
 
 	// create meta data
-	data := make([]*Member, len(r))
+	data := make([]*Member, 0, len(r))
 	for i := range r {
 		if r[i] == nil {
 			log.WithFields(log.Fields{
 				"name": names[i],
 			}).Info("no position data")
 		} else {
-			data[i] = NewMember(names[i], r[i][latIdx], r[i][lonIdx])
+			data = append(data, NewMember(names[i], r[i][latIdx], r[i][lonIdx]))
 			log.WithFields(log.Fields{
 				"name":      names[i],
 				"latitude":  r[i][latIdx],
